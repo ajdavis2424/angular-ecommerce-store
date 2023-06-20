@@ -29,14 +29,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if(this.productsSubsciption){
-      this.productsSubsciption.unsubscribe()
+    if (this.productsSubsciption) {
+      this.productsSubsciption.unsubscribe();
     }
   }
 
   getProducts(): void {
     this.productsSubsciption = this.storeService
-      .getAllProducts(this.count, this.sort)
+      .getAllProducts(this.count, this.sort, this.category)
       .subscribe((_products) => {
         this.products = _products;
       });
@@ -49,6 +49,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onShowCategory(newCategory: string): void {
     this.category = newCategory;
+    this.getProducts();
   }
 
   onAddToCart(product: Product): void {
@@ -59,5 +60,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       quantity: 1,
       id: product.id,
     });
+  }
+  onItemsCountChange(newCount: number): void {
+    this.count = newCount.toString();
+    this.getProducts();
+  }
+
+  onSortChange(newSort: string): void {
+    this.sort = newSort;
+    this.getProducts();
   }
 }
